@@ -3,8 +3,7 @@ import sequelize from '../sequelize.js';
 
 const Audio = sequelize.define('audio', {
   id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
+    type: DataTypes.STRING(50),
     primaryKey: true,
   },
   title: {
