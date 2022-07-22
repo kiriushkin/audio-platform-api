@@ -35,3 +35,5 @@ try {
 } catch (err) {
   console.error(err);
 }
+
+export default Audio;

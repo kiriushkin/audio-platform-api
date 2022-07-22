@@ -35,13 +35,15 @@ try {
 
   const admin = await User.findOne({ where: { name: 'admin' } });
 
-  if (admin) return;
+  if (!admin) {
+    const password = await bcrypt.hash('admin', +SALT_ROUNDS);
 
-  const password = await bcrypt.hash('admin', +SALT_ROUNDS);
+    await User.create({ role: 'admin', name: 'admin', password });
 
-  await User.create({ role: 'admin', name: 'admin', password });
-
-  console.log('Default admin user created.');
+    console.log('Default admin user created.');
+  }
 } catch (err) {
   console.error(err);
 }
+
+export default User;
