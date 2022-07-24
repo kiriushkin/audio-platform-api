@@ -31,4 +31,4 @@ const httpsServer = https.createServer(
 
 if (NODE_ENV === 'production') httpsServer.listen(PORT);
 
-httpServer.listen(PORT);
+if (NODE_ENV === 'development') httpServer.listen(PORT);
