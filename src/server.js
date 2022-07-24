@@ -1,10 +1,13 @@
 import 'dotenv/config';
 import './sequelize.js';
+import fs from 'fs';
 import cors from 'cors';
+import http from 'http';
+import https from 'https';
 import express from 'express';
 import routes from './routes.js';
 
-const { NODE_ENV, CLIENT_URL, PORT } = process.env;
+const { NODE_ENV, SSL_PATH, CLIENT_URL, PORT } = process.env;
 
 const app = express();
 
@@ -17,4 +20,15 @@ if (NODE_ENV === 'development') app.use(cors({ origin: '*' }));
 
 app.use('/api', routes);
 
-app.listen(PORT);
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer(
+  {
+    key: fs.readFileSync(`${SSL_PATH}privkey.pem`),
+    cert: fs.readFileSync(`${SSL_PATH}fullchain.pem`),
+  },
+  app
+);
+
+if (NODE_ENV === 'production') httpsServer.listen(PORT);
+
+httpServer.listen(PORT);
