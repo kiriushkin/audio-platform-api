@@ -20,15 +20,18 @@ if (NODE_ENV === 'development') app.use(cors({ origin: '*' }));
 
 app.use('/api', routes);
 
-const httpServer = http.createServer(app);
-const httpsServer = https.createServer(
-  {
-    key: fs.readFileSync(`${SSL_PATH}privkey.pem`),
-    cert: fs.readFileSync(`${SSL_PATH}fullchain.pem`),
-  },
-  app
-);
+if (NODE_ENV === 'production') {
+  const httpsServer = https.createServer(
+    {
+      key: fs.readFileSync(`${SSL_PATH}privkey.pem`),
+      cert: fs.readFileSync(`${SSL_PATH}fullchain.pem`),
+    },
+    app
+  );
+  httpsServer.listen(PORT);
+}
 
-if (NODE_ENV === 'production') httpsServer.listen(PORT);
-
-if (NODE_ENV === 'development') httpServer.listen(PORT);
+if (NODE_ENV === 'development') {
+  const httpServer = http.createServer(app);
+  httpServer.listen(PORT);
+}
