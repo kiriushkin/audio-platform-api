@@ -37,7 +37,7 @@ class AudioController {
       const { file, body: audio } = req;
 
       if (!file || !audio.title || !audio.releaseDate)
-        return res.status(400).send({ message: 'File of title is missing.' });
+        return res.status(400).send({ message: 'File or title is missing.' });
 
       const resp = await audioService.addAudio(file, audio);
 
